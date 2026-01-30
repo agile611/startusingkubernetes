@@ -25,7 +25,6 @@ Vagrant.configure("2") do |config|
       node.vm.box = "bento/ubuntu-24.04"
       node.vm.hostname = "worker-node0#{i}"
       node.vm.network "private_network", ip: IP_NW + "#{10 + i}"
-      node.vm.provision "shell", path: "k3s_worker.sh"
       node.vm.provider "virtualbox" do |vb|
           vb.memory = 1024 # 1GB per worker
           vb.cpus = 1
