@@ -14,6 +14,9 @@ Vagrant.configure("2") do |config|
     controlplane.vm.network :forwarded_port, guest: 6443, host: 6443
     controlplane.vm.network :forwarded_port, guest: 8080, host: 8080
     controlplane.vm.network :forwarded_port, guest: 80, host: 80
+    for i in 30000..32767
+      controlplane.vm.network :forwarded_port, guest: i, host: i
+    end
     controlplane.vm.provider "virtualbox" do |vb|
         vb.memory = 2048 # Memoria RAM asignada
         vb.cpus = 2     # Número de CPUs asignadas
