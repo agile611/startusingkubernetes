@@ -1,19 +1,20 @@
 # Configuració Global
 NUM_WORKER_NODES = 2
 IP_NW = "192.168.3."
-IP_MASTER = "192.168.3.10" # Fixem la IP del Master per referenciar-la als workers
+IP_controlplane = "192.168.3.10" # Fixem la IP del controlplane per referenciar-la als workers
 
 Vagrant.configure("2") do |config|
   
-  config.vm.define "master" do |master|
-    master.vm.box = "bento/ubuntu-24.04"
-    master.vm.network "private_network", ip: "192.168.3.10"
-    master.vm.hostname = "master"
-    master.vm.synced_folder ".", "/home/vagrant/sync", type: "rsync"
-    master.vm.provision :shell, :path => "k3s_master.sh"
-    master.vm.network :forwarded_port, guest: 6443, host: 6443
-    master.vm.network :forwarded_port, guest: 8080, host: 8080
-    master.vm.provider "virtualbox" do |vb|
+  config.vm.define "controlplane" do |controlplane|
+    controlplane.vm.box = "bento/ubuntu-24.04"
+    controlplane.vm.network "private_network", ip: "192.168.3.10"
+    controlplane.vm.hostname = "controlplane"
+    controlplane.vm.synced_folder ".", "/home/vagrant/sync", type: "rsync"
+    controlplane.vm.provision :shell, :path => "k3s_control.sh"
+    controlplane.vm.network :forwarded_port, guest: 6443, host: 6443
+    controlplane.vm.network :forwarded_port, guest: 8080, host: 8080
+    controlplane.vm.network :forwarded_port, guest: 80, host: 80
+    controlplane.vm.provider "virtualbox" do |vb|
         vb.memory = 2048 # Memoria RAM asignada
         vb.cpus = 2     # Número de CPUs asignadas
       end
