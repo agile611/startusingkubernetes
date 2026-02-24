@@ -1,13 +1,9 @@
 #Anem a buscar el node token al Master
 sudo cat /var/lib/rancher/k3s/server/node-token
-  
-echo "⏳ Esperant que el Master generi el token..."
-while [ ! -f /vagrant/node-token ]; do sleep 2; done
-  
-K3S_TOKEN=$(cat /vagrant/node-token)
-NODE_IP=$(ip addr show eth1 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
+
+K3S_TOKEN=algun_string_random::server:segon_string_random
 
 echo "🚀 Instal·lant K3s Agent (Worker) connectant a #{IP_MASTER}..."
-curl -sfL https://get.k3s.io | K3S_URL=https://#{IP_MASTER}:6443 K3S_TOKEN=$K3S_TOKEN sh -s - --node-ip $NODE_IP --flannel-iface eth1
-  
+curl -sfL https://get.k3s.io | K3S_URL=https://192.168.3.10:6443 K3S_TOKEN=$K3S_TOKEN sh -
+
 echo "✅ Worker unit al clúster!"
