@@ -20,3 +20,11 @@ echo "✅ Worker unit al clúster!"
 #kubectl label node worker-node02 node-role.kubernetes.io/worker=worker
 #Desactivar que al node controlplane es puguin executar pods
 #kubectl taint nodes controlplane node-role.kubernetes.io/master=true:NoSchedule
+
+#Estabilitzar les IPS
+# Al Control Plane
+# curl -sfL https://get.k3s.io | sh -s - --node-ip 192.168.3.10 --flannel-iface eth1
+# Al Worker01
+# curl -sfL https://get.k3s.io | K3S_URL=https://192.168.3.10:6443 K3S_TOKEN=$K3S_TOKEN sh -s - --node-ip 192.168.3.11
+# Al Worker02
+# curl -sfL https://get.k3s.io | K3S_URL=https://192.168.3.10:6443 K3S_TOKEN=$K3S_TOKEN sh -s - --node-ip 192.168.3.12
