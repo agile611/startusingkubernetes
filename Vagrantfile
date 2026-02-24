@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
     master.vm.synced_folder ".", "/home/vagrant/sync", type: "rsync"
     master.vm.provision :shell, :path => "k3s_master.sh"
     master.vm.network :forwarded_port, guest: 6443, host: 6443
-    master.vm.network :forwarded_port, guest: 80, host: 8080
+    master.vm.network :forwarded_port, guest: 8080, host: 8080
     master.vm.provider "virtualbox" do |vb|
         vb.memory = 2048 # Memoria RAM asignada
         vb.cpus = 2     # Número de CPUs asignadas
