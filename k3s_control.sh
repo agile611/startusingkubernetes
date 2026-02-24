@@ -1,5 +1,6 @@
 echo "🚀 Instal·lant K3s Server (Master)..."
-curl -sfL https://get.k3s.io | sh -s - server --tls-san 192.168.3.10
+curl -sfL https://get.k3s.io | sh -s - --node-ip 10.0.3.15
+#curl -sfL https://get.k3s.io | sh -
 sudo chown vagrant:vagrant /etc/rancher/k3s/k3s.yaml
 export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 

@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: web-service
 spec:
-  type: NodePort      # Volem accedir des de fora
+  type: LoadBalancer      # Volem accedir des de fora
   selector:
     app: web          # <--- LA CLAU: Això busca Pods amb l'etiqueta "app: web"
   ports:
@@ -11,3 +11,4 @@ spec:
       port: 80        # El port del Service (el del recepcionista)
       targetPort: 80  # El port del Pod (on escolta l'aplicació realment)
       nodePort: 30007 # (Opcional) El port que obrim al PC host
+      

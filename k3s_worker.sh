@@ -7,10 +7,10 @@
 # K3S_TOKEN=algun_string_random::server:segon_string_random
 # Ex: K3S_TOKEN=K108085cf047fe22375b5c2ac96fec70afffd8a36fa66e8066f0218233e97c8ce6b::server:f3e19f5b6ed1c93e4c1bf0992bb5dc68
 # Quan ja tinguem els nodes preparats i penjats
-# Recordar que 192.168.3.10 és la IP del controlplane
-echo "🚀 Instal·lant K3s Agent (Worker) connectant a 192.168.3.10..."
+# Recordar que 10.0.3.15 és la IP del controlplane
+echo "🚀 Instal·lant K3s Agent (Worker) connectant a 10.0.3.15..."
 
-curl -sfL https://get.k3s.io | K3S_URL=https://192.168.3.10:6443 K3S_TOKEN=$K3S_TOKEN sh -
+curl -sfL https://get.k3s.io | K3S_URL=https://10.0.3.15:6443 K3S_TOKEN=$K3S_TOKEN sh -
 
 echo "✅ Worker unit al clúster!"
 
@@ -23,8 +23,8 @@ echo "✅ Worker unit al clúster!"
 
 #Estabilitzar les IPS
 # Al Control Plane
-# curl -sfL https://get.k3s.io | sh -s - --node-ip 192.168.3.10 --flannel-iface eth1
+# curl -sfL https://get.k3s.io | sh -s - --node-ip 10.0.3.15 --flannel-iface eth1
 # Al Worker01
-# curl -sfL https://get.k3s.io | K3S_URL=https://192.168.3.10:6443 K3S_TOKEN=$K3S_TOKEN sh -s - --node-ip 192.168.3.11
+# curl -sfL https://get.k3s.io | K3S_URL=https://10.0.3.15:6443 K3S_TOKEN=$K3S_TOKEN sh -s - --node-ip 10.0.3.16
 # Al Worker02
-# curl -sfL https://get.k3s.io | K3S_URL=https://192.168.3.10:6443 K3S_TOKEN=$K3S_TOKEN sh -s - --node-ip 192.168.3.12
+# curl -sfL https://get.k3s.io | K3S_URL=https://10.0.3.15:6443 K3S_TOKEN=$K3S_TOKEN sh -s - --node-ip 10.0.3.17
