@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod                 # Què estem creant? Un Pod
+metadata:
+  name: el-meu-pod-nginx  # El nom únic del Pod
+  labels:
+    app: web              # Etiqueta per identificar-lo
+spec:
+  containers:             # Llista de contenidors dins l'apartament
+    - name: nginx-container
+      image: nginx:alpine
+      ports:
+        - containerPort: 80 
