@@ -13,6 +13,8 @@ server_script = <<-SHELL
     sudo chown vagrant:vagrant /etc/rancher/k3s/k3s.yaml
     cp /var/lib/rancher/k3s/server/token /vagrant_shared
     cp /etc/rancher/k3s/k3s.yaml /vagrant_shared
+    sleep 10
+    kubectl taint nodes server node-role.kubernetes.io/master=true:NoSchedule
 SHELL
 
 agent_script = <<-SHELL
