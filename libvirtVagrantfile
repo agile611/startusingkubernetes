@@ -1,0 +1,116 @@
+Aquí no teniu:
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+ 
+# === Configuració Global ===
+server_ip = "192.168.33.10"
+IP_NW = "192.168.33."
+K3S_TOKEN = "K10234567890abcdef:education-cluster-token"  # Token fix per a pràctiques
+ 
+agents = {
+  "agent1" => "192.168.33.11",
+  "agent2" => "192.168.33.12",
+  "agent3" => "192.168.33.13"
+}
+ 
+# === Script per al SERVER (k3s master) ===
+server_script = <<-SHELL
+  apk add --no-cache curl sudo nano
+ 
+  # Detectar interfície de xarxa
+  PRIVATE_IFACE=$(ip -o addr show | grep "#{server_ip}" | awk '{print $2}')
+  if [ -z "$PRIVATE_IFACE" ]; then
+    echo "ERROR: No s'ha trobat la interfície per a #{server_ip}"
+    ip a
+    exit 1
+  fi
+  echo "Using network interface: $PRIVATE_IFACE"
+ 
+  # Instal·lar k3s amb token fix
+  export INSTALL_K3S_EXEC="--bind-address=#{server_ip} --node-external-ip=#{server_ip} --flannel-iface=$PRIVATE_IFACE"
+  curl -sfL https://get.k3s.io | sh -s - --token "#{K3S_TOKEN}" || { echo "ERROR: k3s installation failed"; exit 1; }
+ 
+  # Esperar que k3s estigui llest
+  echo "Waiting for k3s to be ready..."
+  for i in {1..30}; do
+    if sudo k3s kubectl cluster-info &>/dev/null; then
+      echo "k3s is ready!"
+      break
+    fi
+    sleep 2
+  done
+ 
+  # Configurar kubectl per a l'usuari vagrant
+  mkdir -p $HOME/.kube
+  sudo cp /etc/rancher/k3s/k3s.yaml $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+ 
+  echo "k3s server setup complete!"
+SHELL
+ 
+# === Script per als AGENTS (k3s workers) ===
+agent_script = <<-SHELL
+  apk add --no-cache curl
+ 
+  # Detectar interfície
+  PRIVATE_IFACE=$(ip -o addr show | grep "#{IP_NW}" | awk '{print $2}')
+  if [ -z "$PRIVATE_IFACE" ]; then
+    echo "ERROR: No s'ha trobat la interfície de xarxa privada"
+    ip a
+    exit 1
+  fi
+ 
+  # Esperar que el servidor estigui accessible
+  echo "Waiting for server to be ready..."
+  for i in {1..30}; do
+    if curl -sk https://#{server_ip}:6443/healthz &>/dev/null; then
+      echo "Server is ready!"
+      break
+    fi
+    echo "Waiting for server... ($i/30)"
+    sleep 2
+  done
+ 
+  # Instal·lar k3s agent amb token fix
+  export K3S_TOKEN="#{K3S_TOKEN}"
+  export K3S_URL=https://#{server_ip}:6443
+  export INSTALL_K3S_EXEC="--flannel-iface=$PRIVATE_IFACE"
+  
+  curl -sfL https://get.k3s.io | sh - || { echo "ERROR: k3s agent installation failed"; exit 1; }
+  echo "k3s agent setup complete!"
+SHELL
+ 
+# === Configuració de Vagrant ===
+Vagrant.configure("2") do |config|
+  config.vm.box = "generic/alpine318"
+ 
+  # === SERVER ===
+  config.vm.define "server", primary: true do |server|
+    server.vm.network "private_network", ip: server_ip
+    server.vm.hostname = "server"
+    
+    server.vm.provider :libvirt do |v|
+      v.memory = 2048
+      v.cpus = 2
+      v.graphics_type = "spice"
+    end
+    
+    server.vm.provision "shell", inline: server_script
+  end
+ 
+  # === AGENTS ===
+  agents.each do |agent_name, agent_ip|
+    config.vm.define agent_name do |agent|
+      agent.vm.network "private_network", ip: agent_ip
+      agent.vm.hostname = agent_name
+      
+      agent.vm.provider :libvirt do |v|
+        v.memory = 1024
+        v.cpus = 1
+        v.graphics_type = "spice"
+      end
+      
+      agent.vm.provision "shell", inline: agent_script
+    end
+  end
+end
