@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis
+spec:
+  serviceName: "redis"
+  replicas: 3
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:alpine
+        command: ["sh", "-c"]
+        # Aquest script és un exemple molt bàsic:
+        # Si soc el pod 0, soc el mestre.
+        # Si no, em connecto al pod 0 (redis-0.redis) com a rèplica.
+        args:
+        - |
+          if [ "$(hostname)" = "redis-0" ]; then
+            redis-server
+          else
+            redis-server --replicaof redis-0.redis 6379
+          fi
+        volumeMounts:
+        - name: dades
+          mountPath: /data
+  volumeClaimTemplates:
+  - metadata:
+      name: dades
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi

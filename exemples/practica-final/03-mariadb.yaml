@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mariadb-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mariadb
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      containers:
+      - name: mariadb
+        image: mariadb:lts-ubi
+        env:
+        - name: MARIADB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: credencials-bd
+              key: password
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: dades-bd
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: dades-bd
+        persistentVolumeClaim:
+          claimName: mariadb-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: servei-mariadb
+spec:
+  selector:
+    app: mariadb
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306

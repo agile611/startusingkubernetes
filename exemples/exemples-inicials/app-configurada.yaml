@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-amb-configuracio
+spec:
+  containers:
+  - name: el-meu-contenidor
+    image: alpine
+    # Aquesta comanda imprimeix les variables i es queda adormida perquè el Pod no mori
+    command: ["/bin/sh", "-c", "echo El missatge és: $MISSATGE_APP i la clau és: $CLAU_DB; sleep 3600"]
+    env:
+    - name: MISSATGE_APP
+      valueFrom:
+        configMapKeyRef:
+          name: configuracio-web
+          key: MISSATGE
+    - name: CLAU_DB
+      valueFrom:
+        secretKeyRef:
+          name: credencials-db
+          key: PASSWORD

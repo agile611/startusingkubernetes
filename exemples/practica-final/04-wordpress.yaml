@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wordpress
+  template:
+    metadata:
+      labels:
+        app: wordpress
+    spec:
+      containers:
+      - name: wordpress
+        image: wordpress:latest
+        env:
+        - name: WORDPRESS_DB_HOST
+          value: "servei-mariadb" # Apunta al nom del Service de MariaDB
+        - name: WORDPRESS_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: credencials-bd
+              key: password
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: dades-web
+          mountPath: /var/www/html
+      volumes:
+      - name: dades-web
+        persistentVolumeClaim:
+          claimName: wordpress-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: servei-wordpress
+spec:
+  selector:
+    app: wordpress
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

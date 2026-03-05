@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-deployment
+spec:
+  replicas: 9  # <--- Aquí defineixes el nombre de rèpliques
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:alpine
+        volumeMounts:
+        - name: emmagatzematge-redis
+          mountPath: /data
+      volumes:
+      - name: emmagatzematge-redis
+        persistentVolumeClaim:
+          claimName: redis-dades-pvc # Totes les rèpliques comparteixen aquest PVC

@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: el-meu-web-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: el-meu-web  # <--- Això ha de coincidir amb el selector del teu Service
+  template:
+    metadata:
+      labels:
+        app: el-meu-web # <--- Aquesta és l'etiqueta que busca el Service
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80

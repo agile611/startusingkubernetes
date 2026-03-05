@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis-statefulset
+spec:
+  serviceName: "redis"
+  replicas: 3 # <--- 3 rèpliques, cadascuna amb el seu propi disc
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:alpine
+        volumeMounts:
+        - name: emmagatzematge-redis
+          mountPath: /data
+  # En lloc de 'volumes', fem servir això per crear un disc per a cada rèplica:
+  volumeClaimTemplates:
+  - metadata:
+      name: emmagatzematge-redis
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
