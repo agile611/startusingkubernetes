@@ -21,6 +21,8 @@ spec:
             secretKeyRef:
               name: credencials-bd
               key: password
+        - name: MARIADB_DATABASE
+          value: "wordpress"
         ports:
         - containerPort: 3306
         volumeMounts:
