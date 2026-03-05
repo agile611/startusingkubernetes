@@ -10,7 +10,7 @@ Aquest directori conté manifests Kubernetes d'exemple agrupats en subcarpetes. 
 Per aplicar una carpeta sencera:
 
 ```bash
-kubectl apply -f https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/exemples-inicials/
+kubectl apply -f https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/exemples-inicials/
 kubectl apply -f https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/practica-final/install.yaml
 ```
 
@@ -19,18 +19,18 @@ Aplica fitxers individuals amb `kubectl apply -f <ruta/al/fitxer>`.
 ## **Estructura i descripció dels fitxers**
 
 **exemples-inicials/**
-- **Fitxer**: [exemples/exemples-inicials/app-configurada.yaml](https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/exemples-inicials/app-configurada.yaml) — Exemple de desplegament amb configuració (ConfigMap/variables) aplicada.
-- **Fitxer**: [exemples/exemples-inicials/deploy.yaml](https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/exemples-inicials/deploy.yaml) — Manifest d'un `Deployment` bàsic amb rèpliques.
-- **Fitxer**: [exemples/exemples-inicials/nginx-clusterip.yaml](https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/exemples-inicials/nginx-clusterip.yaml) — `Service` de tipus `ClusterIP` per Nginx.
-- **Fitxer**: [exemples/exemples-inicials/nginx-deployment.yaml](https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/exemples-inicials/nginx-deployment.yaml) — `Deployment` de Nginx.
-- **Fitxer**: [exemples/exemples-inicials/nginx-ingress.yaml](https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/exemples-inicials/nginx-ingress.yaml) — Regles d'`Ingress` per exposar Nginx (requereix controlador d'ingress).
-- **Fitxer**: [exemples/exemples-inicials/pod.yaml](https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/exemples-inicials/pod.yaml) — Manifest d'un `Pod` senzill per provar execució bàsica.
-- **Fitxer**: [exemples/exemples-inicials/redis-deployment.yaml](https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/exemples-inicials/redis-deployment.yaml) — `Deployment` de Redis (stateless, per proves).
-- **Fitxer**: [exemples/exemples-inicials/redis-pod.yaml](https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/exemples-inicials/redis-pod.yaml) — `Pod` de Redis (ús demostratiu).
-- **Fitxer**: [exemples/exemples-inicials/redis-pvc.yaml](https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/exemples-inicials/redis-pvc.yaml) — `PersistentVolumeClaim` per a Redis.
-- **Fitxer**: [exemples/exemples-inicials/redis-stateful-replica.yaml](https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/exemples-inicials/redis-stateful-replica.yaml) — Exemple de rèplica/escala en `StatefulSet` per Redis.
-- **Fitxer**: [exemples/exemples-inicials/redis-stateful.yaml](https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/exemples-inicials/redis-stateful.yaml) — `StatefulSet` per desplegament de Redis amb PVCs.
-- **Fitxer**: [exemples/exemples-inicials/service.yaml](https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/exemples-inicials/service.yaml) — Exemple genèric de `Service` (ClusterIP/NodePort segons configuració).
+- **Fitxer**: [exemples/exemples-inicials/app-configurada.yaml](https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/exemples-inicials/app-configurada.yaml) — Exemple de desplegament amb configuració (ConfigMap/variables) aplicada.
+- **Fitxer**: [exemples/exemples-inicials/deploy.yaml](https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/exemples-inicials/deploy.yaml) — Manifest d'un `Deployment` bàsic amb rèpliques.
+- **Fitxer**: [exemples/exemples-inicials/nginx-clusterip.yaml](https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/exemples-inicials/nginx-clusterip.yaml) — `Service` de tipus `ClusterIP` per Nginx.
+- **Fitxer**: [exemples/exemples-inicials/nginx-deployment.yaml](https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/exemples-inicials/nginx-deployment.yaml) — `Deployment` de Nginx.
+- **Fitxer**: [exemples/exemples-inicials/nginx-ingress.yaml](https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/exemples-inicials/nginx-ingress.yaml) — Regles d'`Ingress` per exposar Nginx (requereix controlador d'ingress).
+- **Fitxer**: [exemples/exemples-inicials/pod.yaml](https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/exemples-inicials/pod.yaml) — Manifest d'un `Pod` senzill per provar execució bàsica.
+- **Fitxer**: [exemples/exemples-inicials/redis-deployment.yaml](https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/exemples-inicials/redis-deployment.yaml) — `Deployment` de Redis (stateless, per proves).
+- **Fitxer**: [exemples/exemples-inicials/redis-pod.yaml](https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/exemples-inicials/redis-pod.yaml) — `Pod` de Redis (ús demostratiu).
+- **Fitxer**: [exemples/exemples-inicials/redis-pvc.yaml](https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/exemples-inicials/redis-pvc.yaml) — `PersistentVolumeClaim` per a Redis.
+- **Fitxer**: [exemples/exemples-inicials/redis-stateful-replica.yaml](https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/exemples-inicials/redis-stateful-replica.yaml) — Exemple de rèplica/escala en `StatefulSet` per Redis.
+- **Fitxer**: [exemples/exemples-inicials/redis-stateful.yaml](https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/exemples-inicials/redis-stateful.yaml) — `StatefulSet` per desplegament de Redis amb PVCs.
+- **Fitxer**: [exemples/exemples-inicials/service.yaml](https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/exemples-inicials/service.yaml) — Exemple genèric de `Service` (ClusterIP/NodePort segons configuració).
 
 **maria-db/**
 - **Fitxer**: [exemples/maria-db/mariadb-deployment.yaml](https://git.agile611.com/Agile611/startusingkubernetes/src/branch/main/exemples/maria-db/mariadb-deployment.yaml) — `Deployment` (o StatefulSet) per MariaDB.
