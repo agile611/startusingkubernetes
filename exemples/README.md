@@ -57,6 +57,3 @@ Aplica fitxers individuals amb `kubectl apply -f <ruta/al/fitxer>`.
 kubectl delete -f exemples/practica-final/install.yaml
 kubectl delete -f exemples/exemples-inicials/
 ```
-
----
-Si vols, puc: generar un README per cada subcarpeta individual, afegir descripcions més detallades per cada manifest o crear scripts d'aplicació/neteja automatitzats.
