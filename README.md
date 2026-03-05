@@ -1,4 +1,3 @@
-[![Agile611](https://www.agile611.com/wp-content/uploads/2020/09/cropped-logo-header.png)](http://www.agile611.com/)
 # Començar a utilitzar Kubernetes (k3s) amb Vagrant
 
 Aquest repositori mostra com desplegar un clúster lleuger de Kubernetes (k3s) usant Vagrant per a desenvolupament i proves ràpides.

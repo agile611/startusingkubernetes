@@ -70,3 +70,19 @@ Consells i consideracions
 Vols que:
 - faci un `git commit` d'aquest `README.md`?
 - o que generi instruccions més detallades per personalitzar la topologia (nombre d'agents, recursos, etc.)?
+
+# Suport
+
+Aquest tutorial és publicat al domini públic per [Agile611](http://www.agile611.com/) sota la llicència Creative Commons Attribution-NonCommercial 4.0 International.
+
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
+
+Aquest fitxer README va ser escrit originalment per [Guillem Hernández Sola](https://www.linkedin.com/in/guillemhs/) i també és publicat al domini públic.
+
+Si us plau, contacta amb Agile611 per a més detalls.
+
+* [Agile611](http://www.agile611.com/)
+* Laureà Miró 309
+* 08950 Esplugues de Llobregat (Barcelona)
+
+[![Agile611](https://www.agile611.com/wp-content/uploads/2020/09/cropped-logo-header.png)](http://www.agile611.com/)
