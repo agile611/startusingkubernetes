@@ -5,7 +5,8 @@ agents = { "agent1" => "192.168.56.11",
            "agent3" => "192.168.56.13" }
 
 server_script = <<-SHELL
-    apk add --no-cache curl sudo nano
+    apt-get update
+    apt-get install -y curl sudo nano
     export INSTALL_K3S_EXEC="--bind-address=#{server_ip} --node-ip=#{server_ip} --node-external-ip=#{server_ip} --flannel-iface=eth1"
     curl -sfL https://get.k3s.io | sh -
     echo "Waiting for k3s to become ready"
@@ -25,7 +26,8 @@ server_script = <<-SHELL
 SHELL
 
 agent_script = <<-SHELL
-    apk add --no-cache curl
+    apt-get update
+    apt-get install -y curl
     export K3S_TOKEN_FILE=/vagrant_shared/token
     export K3S_URL=https://#{server_ip}:6443
     export INSTALL_K3S_EXEC="--flannel-iface=eth1"
@@ -33,7 +35,7 @@ agent_script = <<-SHELL
 SHELL
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "generic/alpine318"
+  config.vm.box = "bento/debian-13"
 
   config.vm.define "server", primary: true do |server|
     server.vm.network "private_network", ip: server_ip
