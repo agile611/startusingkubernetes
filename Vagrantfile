@@ -1,20 +1,27 @@
-server_ip = "192.168.33.10"
+server_ip = "192.168.56.10"
 
-agents = { "agent1" => "192.168.33.11",
-           "agent2" => "192.168.33.12",
-           "agent3" => "192.168.33.13" }
+agents = { "agent1" => "192.168.56.11",
+           "agent2" => "192.168.56.12",
+           "agent3" => "192.168.56.13" }
 
 server_script = <<-SHELL
     apk add --no-cache curl sudo nano
-    export INSTALL_K3S_EXEC="--bind-address=#{server_ip} --node-external-ip=#{server_ip} --flannel-iface=eth1"
+    export INSTALL_K3S_EXEC="--bind-address=#{server_ip} --node-ip=#{server_ip} --node-external-ip=#{server_ip} --flannel-iface=eth1"
     curl -sfL https://get.k3s.io | sh -
-    echo "Sleeping for 10 seconds to wait for k3s to start"
-    sleep 10
+    echo "Waiting for k3s to become ready"
+    export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+    for i in $(seq 1 12); do
+      if kubectl get nodes >/dev/null 2>&1; then
+        break
+      fi
+      echo "k3s not ready yet, waiting... ($i)"
+      sleep 15
+    done
     sudo chown vagrant:vagrant /etc/rancher/k3s/k3s.yaml
     cp /var/lib/rancher/k3s/server/token /vagrant_shared
     cp /etc/rancher/k3s/k3s.yaml /vagrant_shared
-    sleep 10
-    kubectl taint nodes server node-role.kubernetes.io/master=true:NoSchedule
+    sleep 15
+    kubectl taint nodes server node-role.kubernetes.io/master=true:NoSchedule || true
 SHELL
 
 agent_script = <<-SHELL
