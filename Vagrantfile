@@ -42,7 +42,7 @@ Vagrant.configure("2") do |config|
     server.vm.synced_folder "./shared", "/vagrant_shared"
     server.vm.hostname = "server"
     server.vm.provider "virtualbox" do |vb|
-      vb.memory = "2048"
+      vb.memory = "1024"
       vb.cpus = "2"
     end
     server.vm.provision "shell", inline: server_script
@@ -54,7 +54,7 @@ Vagrant.configure("2") do |config|
       agent.vm.synced_folder "./shared", "/vagrant_shared"
       agent.vm.hostname = agent_name
       agent.vm.provider "virtualbox" do |vb|
-        vb.memory = "1024"
+        vb.memory = "512"
         vb.cpus = "1"
       end
       agent.vm.provision "shell", inline: agent_script
