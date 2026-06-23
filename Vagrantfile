@@ -45,6 +45,10 @@ Vagrant.configure("2") do |config|
       vb.memory = "1024"
       vb.cpus = "2"
     end
+    # Bucle per obrir el rang de ports del 30000 al 32800
+    (30000..32800).each do |port|
+      server.vm.network "forwarded_port", guest: port, host: port, id: "port-#{port}", auto_correct: true
+    end
     server.vm.provision "shell", inline: server_script
   end
 
