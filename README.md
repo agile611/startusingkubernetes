@@ -1,60 +1,97 @@
 # Començar a utilitzar Kubernetes (k3s) amb Vagrant
 
-Aquest repositori mostra com desplegar un clúster lleuger de Kubernetes (k3s) usant Vagrant per a desenvolupament i proves ràpides.
+Aquest repositori mostra com desplegar un clúster lleuger de Kubernetes (k3s) amb Vagrant i exemples pràctics per aprendre a executar aplicacions en un entorn local.
 
-**Prerequisits**
+## Contingut del repositori
 
-- Vagrant instal·lat
-- Un proveïdor de VM (VirtualBox, Parallels, o un proveïdor suportat)
-- `curl` i `ssh` disponibles
+- `Vagrantfile`: configuració principal per crear un clúster k3s amb Vagrant.
+- `libvirtVagrantfile`: configuració alternativa per a entorns amb `libvirt` en lloc de VirtualBox.
+- `boxes/`: imatges de VM i arxius de suport per a Vagrant.
+- `shared/`: fitxers compartits i configuració comuna entre màquines.
+- `debian/`, `ubuntu/`: catàlegs amb exemples específics per a cada distribució i scripts d'instal·lació.
+- `exemples/`: manifests Kubernetes i pràctiques d'exemple per desplegar aplicacions.
 
-Consulteu el `Vagrantfile` per a configuracions específiques del proveïdor.
+## Exemple principal
 
-**Ràpid Inici**
+El directori `exemples/practica-final` conté una pràctica completa de WordPress + MariaDB amb:
 
-1. Arrancar les màquines amb Vagrant:
+- `01-secret.yaml`: credencials de base de dades.
+- `02-pvcs.yaml`: volum persistent per a WordPress.
+- `03-mariadb.yaml`: MariaDB replicada com a `StatefulSet` de 3 rèpliques.
+- `04-wordpress.yaml`: desplegament de WordPress connectat al primari de MariaDB.
+- `05-ingress.yaml`: Ingress per exposar l'aplicació a `elmeublog.local`.
+- `install.yaml`: manifest combinat per aplicar tota la pràctica amb un sol comandament.
+
+### Com executar la pràctica final
+
+1. Arrenca el clúster amb Vagrant:
 
 ```bash
 vagrant up
 ```
 
-2. Comprovar l'estat del clúster (ssh a una màquina i utilitzar `kubectl` integrat):
+2. Comprova l'estat del node i la connectivitat:
 
 ```bash
 vagrant ssh -c "sudo kubectl get nodes"
 ```
 
-3. Parar i eliminar les màquines:
+3. Aplica la pràctica completa:
+
+```bash
+kubectl apply -f exemples/practica-final/install.yaml
+```
+
+4. Accedeix a WordPress des del navegador amb:
+
+```text
+http://elmeublog.local
+```
+
+> Assegura't d'afegir `127.0.0.1 elmeublog.local` al teu `/etc/hosts` si estàs treballant en local.
+
+## Altres exemples
+
+- `exemples/exemples-inicials`: manifestos bàsics de Kubernetes per a desplegar pods, serveis, ingress, Redis i Nginx.
+- `exemples/maria-db`: exemple de MariaDB amb Deployment i PVC.
+- `exemples/mariadb-replication`: configuració de replicació de MariaDB amb `StatefulSet` i `ConfigMap`.
+
+## Requisits
+
+- Vagrant instal·lat
+- Proveïdor de VM compatible (per exemple, VirtualBox o libvirt)
+- `curl` i `ssh` disponibles
+- `kubectl` accessible dins de la VM o des de l'amfitrió si tens accés a la configuració del cluster
+
+## Personalització
+
+- Modifica el `Vagrantfile` per canviar la mida de la VM, el nombre de nodes o la xarxa.
+- Utilitza `libvirtVagrantfile` si prefereixes treballar amb `libvirt`.
+- Revisa els fitxers dins dels directoris `debian/` i `ubuntu/` per veure scripts específics d'instal·lació.
+
+## Neteja
+
+Per aturar i eliminar les màquines virtuals:
 
 ```bash
 vagrant halt
 vagrant destroy -f
 ```
 
-**Detalls d'instal·lació**
+Per eliminar la pràctica final de Kubernetes:
 
-Les instruccions d'instal·lació i els scripts utilitzats per configurar k3s estan en aquest repo. Revisa aquest fitxer per entendre com s'instal·la i s'inicia k3s dins de les VM.
+```bash
+kubectl delete -f exemples/practica-final/install.yaml
+```
 
-**Personalitzar**
+## Contribucions
 
-Modifica el [Vagrantfile](Vagrantfile) per canviar la mida de la VM, la xarxa o el nombre de nodes.
+Si trobes un error o vols millorar aquesta guia, obre un issue o envia un PR.
 
-**Contribucions i errors**
+## Suport i llicència
 
-Obre un issue o envia un PR amb millores o problemes trobats.
-
-# Suport
-
-Aquest tutorial és publicat al domini públic per [Agile611](http://www.agile611.com/) sota la llicència Creative Commons Attribution-NonCommercial 4.0 International.
+Aquest repositori es publica per Agile611 amb llicència Creative Commons Attribution-NonCommercial 4.0 International.
 
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 
-Aquest fitxer README va ser escrit originalment per [Guillem Hernández Sola](https://www.linkedin.com/in/guillemhs/) i també és publicat al domini públic.
-
-Si us plau, contacta amb Agile611 per a més detalls.
-
-* [Agile611](http://www.agile611.com/)
-* Laureà Miró 309
-* 08950 Esplugues de Llobregat (Barcelona)
-
-[![Agile611](https://www.agile611.com/wp-content/uploads/2020/09/cropped-logo-header.png)](http://www.agile611.com/)
+Aquest README s'ha creat per facilitar l'ús del repositori i ajudar a desplegar Kubernetes local amb exemples pràctics.
