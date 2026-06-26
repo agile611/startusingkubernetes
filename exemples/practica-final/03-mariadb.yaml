@@ -1,37 +1,29 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: ConfigMap
 metadata:
-  name: mariadb-deployment
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: mariadb
-  template:
-    metadata:
-      labels:
-        app: mariadb
-    spec:
-      containers:
-      - name: mariadb
-        image: mariadb:lts-ubi
-        env:
-        - name: MARIADB_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: credencials-bd
-              key: password
-        - name: MARIADB_DATABASE
-          value: "wordpress"
-        ports:
-        - containerPort: 3306
-        volumeMounts:
-        - name: dades-bd
-          mountPath: /var/lib/mysql
-      volumes:
-      - name: dades-bd
-        persistentVolumeClaim:
-          claimName: mariadb-pvc
+  name: mariadb-configmap
+data:
+  primary.cnf: |
+    [mariadb]
+    log-bin
+    log-basename=my-mariadb
+
+  replica.cnf: |
+    [mariadb]
+    log-basename=my-mariadb
+
+  primary.sql: |
+    CREATE USER 'repluser'@'%' IDENTIFIED BY 'replsecret';
+    GRANT REPLICATION REPLICA ON *.* TO 'repluser'@'%';
+    CREATE DATABASE IF NOT EXISTS wordpress;
+
+  secondary.sql: |
+    CHANGE MASTER TO
+      MASTER_HOST='mariadb-sts-0.servei-mariadb.default.svc.cluster.local',
+      MASTER_USER='repluser',
+      MASTER_PASSWORD='replsecret',
+      MASTER_CONNECT_RETRY=10;
+    START SLAVE;
 ---
 apiVersion: v1
 kind: Service
@@ -44,3 +36,87 @@ spec:
     - protocol: TCP
       port: 3306
       targetPort: 3306
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mariadb-sts
+spec:
+  serviceName: "servei-mariadb"
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mariadb
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      initContainers:
+      - name: init-mariadb
+        image: mariadb:lts-ubi
+        command:
+        - bash
+        - "-c"
+        - |
+          set -ex
+          echo 'Starting init-mariadb'
+          ls /mnt/config-map
+          [[ `hostname` =~ -([0-9]+)$ ]] || exit 1
+          ordinal=${BASH_REMATCH[1]}
+          if [[ $ordinal -eq 0 ]]; then
+            cp /mnt/config-map/primary.cnf /etc/mysql/conf.d/server-id.cnf
+            cp /mnt/config-map/primary.sql /docker-entrypoint-initdb.d
+          else
+            cp /mnt/config-map/replica.cnf /etc/mysql/conf.d/server-id.cnf
+            cp /mnt/config-map/secondary.sql /docker-entrypoint-initdb.d
+          fi
+          echo server-id=$((3000 + ordinal)) >> /etc/mysql/conf.d/server-id.cnf
+          ls /etc/mysql/conf.d/
+          cat /etc/mysql/conf.d/server-id.cnf
+        volumeMounts:
+        - name: mariadb-config-map
+          mountPath: /mnt/config-map
+        - name: mariadb-config
+          mountPath: /etc/mysql/conf.d/
+        - name: initdb
+          mountPath: /docker-entrypoint-initdb.d
+      containers:
+      - name: mariadb
+        image: mariadb:lts-ubi
+        ports:
+        - containerPort: 3306
+          name: mariadb-port
+        env:
+        - name: MARIADB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: credencials-bd
+              key: password
+        - name: MYSQL_INITDB_SKIP_TZINFO
+          value: "1"
+        volumeMounts:
+        - name: datadir
+          mountPath: /var/lib/mysql
+        - name: mariadb-config
+          mountPath: /etc/mysql/conf.d/
+        - name: initdb
+          mountPath: /docker-entrypoint-initdb.d
+      volumes:
+      - name: mariadb-config-map
+        configMap:
+          name: mariadb-configmap
+      - name: mariadb-config
+        emptyDir: {}
+      - name: initdb
+        emptyDir: {}
+  volumeClaimTemplates:
+  - metadata:
+      name: datadir
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 2Gi

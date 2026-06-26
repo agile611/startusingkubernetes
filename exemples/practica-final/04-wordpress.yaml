@@ -17,16 +17,16 @@ spec:
         image: wordpress:latest
         env:
         - name: WORDPRESS_DB_HOST
-          value: "servei-mariadb" # Apunta al nom del Service de MariaDB
+          value: "mariadb-sts-0.servei-mariadb.default.svc.cluster.local" # Apunta al pod primari de MariaDB
         - name: WORDPRESS_DB_PASSWORD
           valueFrom:
             secretKeyRef:
               name: credencials-bd
               key: password
         - name: WORDPRESS_DB_USER
-          value: "root" 
+          value: "root"
         - name: WORDPRESS_DB_NAME
-          value: "wordpress" 
+          value: "wordpress"
         ports:
         - containerPort: 80
         volumeMounts:
