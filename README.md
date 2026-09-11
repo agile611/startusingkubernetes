@@ -1,4 +1,6 @@
-# Entorno de laboratario: Un clúster Kubernetes multinodo con k3d
+[![Agile611](https://www.agile611.com/wp-content/uploads/2020/09/cropped-logo-header.png)](http://www.agile611.com/)
+
+# Agile611 — Entorno de laboratorio Kubernetes — Un clúster Kubernetes multinodo con k3d
 
 Vamos a instalar **Docker, kubectl, Helm y k3d** en Debian / Ubuntu. Después crearás un clúster Kubernetes con un nodo de control y tres nodos de trabajo. Finalmente, desplegarás Nginx para comprobar que todo funciona, básicamente para ver que el entorno funciona.
 
@@ -573,3 +575,21 @@ Durante esta práctica has utilizado los siguientes comandos principales:
 | Eliminar el clúster | `k3d cluster delete curso` |
 
 El laboratorio estará funcionando correctamente cuando los cuatro nodos aparezcan como **`Ready`**, el pod Nginx alcance el estado **`Running`** y puedas obtener su página mediante `curl`.
+
+---
+
+## Contribuciones
+
+Si encuentras un error o quieres mejorar esta guía, abre un issue o envía un PR.
+
+## Soporte y licencia
+
+Publicado por [Agile611](http://www.agile611.com/) bajo licencia **Creative Commons Attribution-NonCommercial 4.0 International**.
+
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
+
+README escrito por [Guillem Hernández Sola](https://www.linkedin.com/in/guillemhs/).
+
+**Contacto:**
+- 🌐 [agile611.com](http://www.agile611.com/)
+- 📍 Carrer Laureà Miró 309, 08950 Esplugues de Llobregat (Barcelona)
