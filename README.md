@@ -30,6 +30,7 @@ Necesitarás:
 ## 1. Preparar el entorno
 
 Usaremos **k3d**, una herramienta que permite ejecutar nodos k3s como contenedores Docker.
+
 Más info [https://k3s.io](https://k3s.io)
 
 La arquitectura del laboratorio es:
