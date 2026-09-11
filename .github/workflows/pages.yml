@@ -36,10 +36,10 @@ jobs:
       - name: Configurar GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Construir la documentación
+      - name: Construir documentación
         run: mkdocs build --strict
 
-      - name: Subir artefacto de GitHub Pages
+      - name: Subir artefacto
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./site
@@ -54,6 +54,6 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: Publicar en GitHub Pages
+      - name: Desplegar en GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
