@@ -1,46 +1,13 @@
+# Entorno virtual de Python
+.venv/
 
-# Created by https://www.gitignore.io/api/macos,vagrant,visualstudiocode
+# Sitio generado por MkDocs
+site/
 
-### macOS ###
-*.DS_Store
-.AppleDouble
-.LSOverride
+# Caché de Python
+__pycache__/
+*.py[cod]
 
-# Icon must end with two \r
-Icon
-
-# Thumbnails
-._*
-
-# Files that might appear in the root of a volume
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-.com.apple.timemachine.donotpresent
-
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
-
-### Vagrant ###
-.vagrant/
-*.box
-
-### VisualStudioCode ###
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.history
-
-### Ansible ###
-*.retry
-
-# End of https://www.gitignore.io/api/macos,vagrant,visualstudiocode,ansible
+# Editores
+.vscode/
+.idea/
