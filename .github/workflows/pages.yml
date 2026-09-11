@@ -13,7 +13,7 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -39,10 +39,10 @@ jobs:
       - name: Construir la documentación
         run: mkdocs build --strict
 
-      - name: Preparar artefacto de GitHub Pages
+      - name: Subir artefacto de GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: site
+          path: ./site
 
   deploy:
     name: Publicar documentación
