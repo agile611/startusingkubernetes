@@ -174,3 +174,96 @@ Una progresión práctica podría ser:
 10. **Seguridad: RBAC, ServiceAccounts y NetworkPolicies.**
 
 Como dimensionamiento orientativo, una máquina con **16 GB de RAM y 6–8 CPU** permite trabajar cómodamente con el clúster básico y varias aplicaciones docentes. Para observabilidad, service meshes o varios clústeres simultáneos, **32 GB de RAM** ofrece bastante más margen.
+
+---
+La prueba más simple consiste en crear un **pod con Nginx**, comprobar que queda en estado `Running` y acceder mediante `port-forward`. Así validas la API, el scheduler, el nodo y la red básica, sin configurar Ingress.
+
+## 1. Comprobar los nodos
+
+```bash
+kubectl get nodes
+```
+
+Todos deberían aparecer como `Ready`:
+
+```text
+NAME                     STATUS   ROLES                  AGE   VERSION
+k3d-curso-server-0       Ready    control-plane,master  ...   ...
+k3d-curso-agent-0        Ready    <none>                 ...   ...
+```
+
+---
+
+## 2. Crear un pod de prueba
+
+```bash
+kubectl run nginx \
+  --image=nginx:alpine \
+  --port=80
+```
+
+Espera a que esté disponible:
+
+```bash
+kubectl wait \
+  --for=condition=Ready \
+  pod/nginx \
+  --timeout=60s
+```
+
+Comprueba en qué nodo se ejecuta:
+
+```bash
+kubectl get pod nginx -o wide
+```
+
+El estado esperado es:
+
+```text
+NAME    READY   STATUS    RESTARTS   AGE
+nginx   1/1     Running   0          ...
+```
+
+---
+
+## 3. Acceder a Nginx
+
+Abre temporalmente el puerto local `8080`:
+
+```bash
+kubectl port-forward pod/nginx 8080:80
+```
+
+Mantén ese terminal abierto y, desde otro terminal, ejecuta:
+
+```bash
+curl http://127.0.0.1:8080
+```
+
+Deberías recibir el HTML de bienvenida de Nginx:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+...
+```
+
+También puedes abrir en el navegador:
+
+```text
+http://127.0.0.1:8080
+```
+
+Para detener el `port-forward`, pulsa `Ctrl+C`.
+
+---
+
+## 4. Limpiar la prueba
+
+```bash
+kubectl delete pod nginx
+```
+
+Si `kubectl get nodes` muestra los nodos como **Ready**, el pod alcanza el estado **Running** y `curl` devuelve la página de Nginx, el clúster funciona correctamente.
